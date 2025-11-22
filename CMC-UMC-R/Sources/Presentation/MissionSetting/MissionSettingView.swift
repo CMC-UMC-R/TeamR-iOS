@@ -7,13 +7,49 @@
 
 import SwiftUI
 
+enum DayOfWeek: String, Codable, CaseIterable {
+    case monday = "MONDAY"
+    case tuesday = "TUESDAY"
+    case wednesday = "WEDNESDAY"
+    case thursday = "THURSDAY"
+    case friday = "FRIDAY"
+    case saturday = "SATURDAY"
+    case sunday = "SUNDAY"
+
+    /// 화면 표시용 한글 변환
+    var displayName: String {
+        switch self {
+        case .monday: return "월"
+        case .tuesday: return "화"
+        case .wednesday: return "수"
+        case .thursday: return "목"
+        case .friday: return "금"
+        case .saturday: return "토"
+        case .sunday: return "일"
+        }
+    }
+    
+    var index: Int {
+        switch self {
+        case .monday: return 0
+        case .tuesday: return 1
+        case .wednesday: return 2
+        case .thursday: return 3
+        case .friday: return 4
+        case .saturday: return 5
+        case .sunday: return 6
+        }
+    }
+}
+
+
 struct MissionSettingView: View {
-    let days = ["일", "월", "화", "수", "목", "금", "토"]
+    @StateObject var viewModel = MissionSettingViewModel()
+    let baseMissionTypes: [MissionCategory] = [.wakeup, .move, .work]
     @State var isSheetPresent = false
-//    @State var missionType: MissionType = .wakeup
     @State var mission: Mission = Mission(
-        type: .wakeup,
-        category: .move,
+        missionCategory: .wakeup,
+        missionType: .move,
         detail: "00회",
         completeTime: DateComponents(
             calendar: .current,
@@ -27,20 +63,20 @@ struct MissionSettingView: View {
     var body: some View {
         VStack {
             HStack {
-                ForEach(Array(days.enumerated()), id: \.offset) { index, day in
+                ForEach(DayOfWeek.allCases, id: \.self) { day in
                     Button {
-                        date = currentWeekDates()[index]
+                        viewModel.selectedDayOfWeek = day
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(
-                                    currentWeekDates()[index].isSameDay(as: date)
+                                    viewModel.selectedDayOfWeek == day
                                     ? Color.primary700
                                     : Color.primary500
                                 )
                                 .frame(width: 37, height: 37)
 
-                            Text(day)
+                            Text(day.displayName)
                                 .fontStyle(.main3)
                                 .foregroundStyle(.black)
                                 .padding()
@@ -51,12 +87,27 @@ struct MissionSettingView: View {
             .padding()
             
             VStack {
-                ForEach(Mission.missions, id: \.self) { mission in
-                    componentView(type: mission.type.rawValue, completeTime: mission.completeTime)
-                        .onTapGesture {
-                            self.mission = mission
+                ForEach(baseMissionTypes, id: \.self) { type in
+                    let existingMission = viewModel.missions.first(where: { $0.missionCategory == type })
+//                    let existingMission = Mission.missions.first(where: { $0.type == type })
+                    
+                    componentView(
+                        type: type.displayName,
+                        completeTime: existingMission?.completeTime,
+                    )
+                    .onTapGesture {
+                        if existingMission == nil {
+                            viewModel.selectedCategory = type
                             isSheetPresent = true
                         }
+                    }
+                    
+//                    componentView(type: mission.type.rawValue, completeTime: mission.completeTime)
+//                        .onTapGesture {
+//                            self.mission = mission
+//                            viewModel.selectedCategory = mission.type
+//                            isSheetPresent = true
+//                        }
                 }
             }
             .padding()
@@ -64,12 +115,19 @@ struct MissionSettingView: View {
             Spacer()
         }
         .sheet(isPresented: $isSheetPresent) {
-            MissionCreateView(mission: $mission, date: $date)
+            MissionCreateView(viewModel: viewModel, mission: $mission, date: $date)
                 .presentationDragIndicator(.visible)
+                .onAppear {
+                    viewModel.reset()
+                }
+        }
+        .task {
+            await viewModel.fetchMissions()
+            print(viewModel.missions)
         }
     }
     
-    func componentView(type: String, completeTime: Date) -> some View {
+    func componentView(type: String, completeTime: Date?) -> some View {
         VStack {
             HStack {
                 Text("\(type)")
@@ -78,7 +136,7 @@ struct MissionSettingView: View {
                 Spacer()
             }
             HStack {
-                Text("\(completeTime.timeString)")
+                Text("\(completeTime?.timeString ?? "00:00")")
                     .fontStyle(.display1)
                     .foregroundStyle(Color.gray600)
                 

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainView: View {
     
+    @State var mainViewModel = MainViewModel()
+    
     var dailyChecklist: [Bool] = [true, true, true, false, false, false, false]
     
     let leftPadding: CGFloat = 52
@@ -26,6 +28,11 @@ struct MainView: View {
                 dailyIconListView()
                 missionBoardView(geo.size.height * boardHeightRatio)
                 buttonListView()
+            }
+        }
+        .onAppear {
+            Task {
+                await mainViewModel.getMissionLogList()
             }
         }
     }
@@ -87,7 +94,7 @@ struct MainView: View {
                         )
                 }
                 .overlay {
-                    CirclesOverlay(width: geo.size.width, height: geo.size.height, leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+                    CirclesOverlay(width: geo.size.width, height: geo.size.height, leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin, response: mainViewModel.missionLogResponse ?? .stub01)
                     
                 }
         }

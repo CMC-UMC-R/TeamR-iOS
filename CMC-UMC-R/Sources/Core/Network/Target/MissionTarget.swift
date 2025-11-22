@@ -10,11 +10,11 @@ import Moya
 import Alamofire
 
 enum MissionTarget {
-    case createMissions                             /// 미션 생성
-    case getMissions(DayOfWeekType)       /// 요일별 미션 조회
+    case createMissions(CreateMissionRequest)                             /// 미션 생성
+    case getMissions(DayOfWeek)       /// 요일별 미션 조회
 }
 
-extension MissionTarget {
+extension MissionTarget: BaseTargetType {
     var path: String {
         switch self {
         case .createMissions:
@@ -27,19 +27,21 @@ extension MissionTarget {
     var method: Moya.Method {
         switch self {
         case .createMissions:
-                .get
-        case .getMissions(let dayOfWeekType):
+                .post
+        case .getMissions:
                 .get
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .createMissions:
+        case .createMissions(let body):
+            return .requestJSONEncodable(body)
+        case .getMissions:
             return .requestPlain
-        case .getMissions(let dayOfWeekType):
-            let parameters: [String: Any] = ["dayOfWeekType": dayOfWeekType.rawValue]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
+//            let parameters: [String: Any] = ["dayOfWeekType": dayOfWeekType.rawValue]
+//            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         }
     }
 }
