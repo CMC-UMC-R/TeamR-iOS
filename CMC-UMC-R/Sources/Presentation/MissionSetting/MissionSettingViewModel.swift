@@ -12,7 +12,7 @@ import Combine
 final class MissionSettingViewModel: ObservableObject {
     @Published var missions: [Mission] = []
     
-    @Published var selectedCategory: MissionCategory = .move
+    @Published var selectedCategory: MissionCategoryType = .move
     @Published var selectedType: MissionType = .move
     @Published var selectedGeminiCategory: GeminiCategory?
     @Published var selectedDayOfWeek: DayOfWeek = .sunday

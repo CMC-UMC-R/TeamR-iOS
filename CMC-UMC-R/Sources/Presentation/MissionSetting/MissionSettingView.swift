@@ -45,7 +45,7 @@ enum DayOfWeek: String, Codable, CaseIterable {
 
 struct MissionSettingView: View {
     @StateObject var viewModel = MissionSettingViewModel()
-    let baseMissionTypes: [MissionCategory] = [.wakeup, .move, .work]
+    let baseMissionTypes: [MissionCategoryType] = [.wakeup, .move, .work]
     @State var isSheetPresent = false
     @State var mission: Mission = Mission(
         missionCategory: .wakeup,

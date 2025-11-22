@@ -21,3 +21,38 @@ enum MissionCategoryType: String, Codable {
         }
     }
 }
+
+extension MissionCategoryType {
+    var geminiCategories: [GeminiCategory] {
+        switch self {
+        case .wakeup:
+            return [
+                .bedroom,
+                .livingRoom,
+                .bathroom,
+                .kitchen,
+                .dressingRoom
+            ]
+
+        case .move:
+            return [
+                .martConvenience,
+                .building,
+                .streetTree,
+                .road
+            ]
+
+        case .work:
+            return [
+                .studyRoom,
+                .beverage,
+                .computer,
+                .writingTools,
+                .bookNote
+            ]
+
+        default:
+            return []
+        }
+    }
+}

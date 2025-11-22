@@ -23,7 +23,7 @@ struct CreateMissionResponse: Codable {
 struct CreateMissionRequest: Codable {
     let userId: String
     let time: String
-    let missionCategory: MissionCategory
+    let missionCategory: MissionCategoryType
     let geminiCategory: GeminiCategory?
     let missionType: MissionType
     let dayOfWeek: DayOfWeek
