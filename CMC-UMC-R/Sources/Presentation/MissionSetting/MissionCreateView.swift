@@ -62,10 +62,14 @@ struct MissionCreateView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(.black)
-                    .background(.gray)
+                    .background(Color.primary700)
+//                    .background(viewModel.word.isEmpty || viewModel.count.isEmpty ? Color.gray : Color.primary700)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .padding()
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
     
@@ -109,10 +113,6 @@ struct MissionCreateView: View {
                             .onChange(of: viewModel.count) { newValue, _ in
                                 viewModel.count = newValue.filter { $0.isNumber }
                             }
-                        //                        .frame(width: 60) // 숫자 필드 폭
-                        //                        .padding(8)
-                        //                        .background(Color.gray.opacity(0.1))
-                        //                        .clipShape(RoundedRectangle(cornerRadius: 8))
                         
                         Text(viewModel.selectedCategory == .wakeup ? "회" : "보")
                             .fontStyle(.main4)
