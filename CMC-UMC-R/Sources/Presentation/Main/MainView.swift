@@ -11,6 +11,11 @@ struct MainView: View {
     
     var dailyChecklist: [Bool] = [true, true, true, false, false, false, false]
     
+    let leadingPadding: Int = 50
+    let trailingPadding: Int = 50
+    let topPadding: Int = 70
+
+    
     var body: some View {
         VStack {
             dailyIconListView()
@@ -18,16 +23,17 @@ struct MainView: View {
         }
     }
     
-    // 날짜 아이콘
+    // 날짜 아이콘 리스트
     func dailyIconListView() -> some View {
         HStack {
             ForEach(dailyChecklist, id: \.self) { daily in
                 dailyIconView(isChecked: true)
             }
         }
+        .padding(.horizontal, 28)
     }
     
-    // 날짜 아이콘 리스트
+    // 날짜 아이콘
     func dailyIconView(isChecked: Bool) -> some View {
         VStack(spacing: 4) {
             Image(systemName: "checkmark")
@@ -46,20 +52,31 @@ struct MainView: View {
         .frame(maxWidth: .infinity)
     }
     
-    // 미션보드
-    func missionBoardView() -> some View {
-        ZStack {
-            
-        }
+    func backgroundView() -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .foregroundStyle(.green)
     }
     
-    func missionRoadView() -> some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            let height = geometry.size.height
+    // 미션보드
+    func missionBoardView() -> some View {
+        
+        ZStack {
+            
+            backgroundView()
+            
+            GeometryReader { geometry in
+                missionRoadView(geometry.size.width, geometry.size.height)
+            }
             
             
         }
+        .padding(.horizontal, 20)
+    }
+    
+    func missionRoadView(_ width: Double, _ height: Double) -> some View {
+        RoadPathShape()
+            .stroke(Color.yellow, lineWidth: 15)
+        
     }
 }
 
