@@ -23,7 +23,7 @@ struct MissionCircleView: View {
                             result.iconImage
                                 .offset(y: -5)
                         }
-                    Text("\(mission.rawValue)")
+                    Text("\(mission.displayName)")
                         .foregroundStyle(Color.gray400)
                         .fontStyle(.caption)
 
@@ -37,7 +37,7 @@ struct MissionCircleView: View {
                             .offset(y: result == .PENDING ? -28 : 0)
                     }
                     .overlay {
-                        Text("\(mission.rawValue)")
+                        Text("\(mission.displayName)")
                             .padding(.horizontal, 20)
                             .padding(.vertical, 4.5)
                             .background(Color.primary100)
