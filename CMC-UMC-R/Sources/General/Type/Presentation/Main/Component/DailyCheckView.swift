@@ -10,7 +10,7 @@ import SwiftUI
 struct DailyCheckView: View {
     
     let isChecked: Bool
-    let date: Int
+    let date: String
     
     var body: some View {
         VStack(spacing: 4) {
@@ -26,7 +26,7 @@ struct DailyCheckView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
                 
-            Text("\(date)")
+            Text("\(extractDayUsingFormatter(from: date) ?? "")")
                 .foregroundStyle(.black)
         }
         .padding(4)
@@ -37,9 +37,9 @@ struct DailyCheckView: View {
 }
 
 #Preview("true") {
-    DailyCheckView(isChecked: true, date: 1)
+    DailyCheckView(isChecked: true, date: "2020-1-1")
 }
 
 #Preview("failure") {
-    DailyCheckView(isChecked: false, date: 1)
+    DailyCheckView(isChecked: false, date: "2020-1-1")
 }

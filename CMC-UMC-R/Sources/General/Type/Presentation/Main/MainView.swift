@@ -33,6 +33,7 @@ struct MainView: View {
         .onAppear {
             Task {
                 await mainViewModel.getMissionLogList()
+                await mainViewModel.getWeeklyStatus()
             }
         }
     }
@@ -51,8 +52,8 @@ struct MainView: View {
     // 날짜 아이콘 리스트
     func dailyIconListView() -> some View {
         HStack {
-            ForEach(dailyChecklist, id: \.self) { daily in
-                DailyCheckView(isChecked: daily, date: 1)
+            ForEach(mainViewModel.weeklyStatusResponse ?? .stub01, id: \.self) { day in
+                DailyCheckView(isChecked: day.isCompleted ?? true, date: day.date)
             }
         }
         .padding(.horizontal, 28)

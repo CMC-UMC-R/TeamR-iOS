@@ -97,23 +97,23 @@ extension MissionService {
         }
     }
     
-//    func getWeeklyStatus() async throws -> {
-//        return try await withCheckedThrowingContinuation { continuation in
-//            provider.request(.getWeeklyStatus) { result in
-//                switch result {
-//                case let .success(response):
-//                    do {
-//                        let response = try self.jsonDecoder.decode(CreateMissionResponse.self, from: response.data)
-//                        continuation.resume(returning: response)
-//                    } catch {
-//                        Log.network("getMissions() 실패", error.localizedDescription)
-//                        continuation.resume(throwing: error)
-//                    }
-//                    
-//                case let .failure(error):
-//                    continuation.resume(throwing: error)
-//                }
-//            }
-//        }
-//    }
+    func getWeeklyStatus() async throws -> WeeklyStatusResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            provider.request(.getWeeklyStatus) { result in
+                switch result {
+                case let .success(response):
+                    do {
+                        let response = try self.jsonDecoder.decode(WeeklyStatusResponse.self, from: response.data)
+                        continuation.resume(returning: response)
+                    } catch {
+                        Log.network("getMissions() 실패", error.localizedDescription)
+                        continuation.resume(throwing: error)
+                    }
+                    
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
