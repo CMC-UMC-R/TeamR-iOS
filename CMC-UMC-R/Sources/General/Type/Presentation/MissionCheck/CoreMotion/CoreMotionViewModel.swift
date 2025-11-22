@@ -115,6 +115,19 @@ final class CoreMotionViewModel: ObservableObject {
         motionManager.delegate = nil
         print("🗑️ CoreMotionViewModel 해제")
     }
+    
+    func waitUntilCompleted() async -> Bool {
+        // 이미 완료되어 있으면 즉시 true
+        if isMissionCompleted { return true }
+        
+        // "흔들기 완료"가 될 때까지 기다리는 Continuation
+        return await withCheckedContinuation { continuation in
+            // onComplete 콜백을 교체해서 true 반환
+            self.onComplete = {
+                continuation.resume(returning: true)
+            }
+        }
+    }
 }
 
 // MARK: - CoreMotionManagerDelegate

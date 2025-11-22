@@ -114,7 +114,7 @@ struct MissionCreateView: View {
                         //                        .background(Color.gray.opacity(0.1))
                         //                        .clipShape(RoundedRectangle(cornerRadius: 8))
                         
-                        Text("회")
+                        Text(viewModel.selectedCategory == .wakeup ? "회" : "보")
                             .fontStyle(.main4)
                         
                         Spacer()

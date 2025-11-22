@@ -9,14 +9,17 @@ import SwiftUI
 import Combine
 
 struct MissionCheckView: View {
+    @StateObject private var viewModel = CoreMotionViewModel(targetCount: 30)
     @State private var now: Date = Date()
     @Binding var mission: Mission
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let leftTime: Date
+    @State var showSuccess = false
     
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack {
+        ZStack {
             VStack(spacing: 4) {
                 HStack(spacing: 4) {
                     Image("icon-timer")
@@ -33,7 +36,7 @@ struct MissionCheckView: View {
             }
             
             VStack {
-                Text("\(mission.missionType?.displayName ?? "") 미션")
+                Text("\(mission.category.displayName) 미션")
                     .fontStyle(.display2)
                     .foregroundStyle(Color.black)
                 
@@ -56,8 +59,27 @@ struct MissionCheckView: View {
                 }
                 .padding(.bottom, 48)
                 
-                Button {
-                    
+                Button {                    
+                    if mission.category == .move && mission.missionType == .move {
+                        Task {
+                            let result = await DistanceTrackingManager.shared.evaluateMissionHistory(endDate: todayAt(time: mission.time) ?? Date(), targetSteps: mission.count ?? 0)
+
+                            if result {
+                                showSuccess = true
+                            }
+                        }
+                    } else if mission.category == .wakeup && mission.missionType == .move {
+                        Task {
+                            viewModel.startMission {}
+                            let result = await viewModel.waitUntilCompleted()
+                            
+                            if result {
+                                showSuccess = true
+                            }
+                        }
+                    } else {
+                        // 카메라 인증
+                    }
                 } label: {
                     Text("미션 인증")
                         .padding()
@@ -71,13 +93,35 @@ struct MissionCheckView: View {
             .background(Color.primary400)
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .shadow(color: Color.black.opacity(0.1), radius: 12, x: 0, y: 0)
+            .padding()
+            
+            if showSuccess {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        dismiss()
+                    }
+                
+                VStack {
+                    Text("인증 완료 !")
+                        .fontStyle(.display2)
+                        .foregroundStyle(.white)
+                    
+                    Image("rabbit1")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .frame(height: 397)
+                .background(Color.primary700)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .padding()
+            }
         }
-        .padding()
         .onReceive(timer) { current in
             now = current
-        }
-        .task {
-//            print(await DistanceTrackingManager.shared.evaluateMissionHistory(endDate: mission.completeTime, targetSteps: 1000))
         }
     }
     
@@ -90,4 +134,19 @@ struct MissionCheckView: View {
         
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    
+    func todayAt(time: String) -> Date? {
+        let parts = time.split(separator: ":")
+        guard parts.count == 2,
+              let hour = Int(parts[0]),
+              let minute = Int(parts[1]) else { return nil }
+
+        return Calendar.current.date(
+            bySettingHour: hour,
+            minute: minute,
+            second: 0,
+            of: Date()
+        )
+    }
+
 }
