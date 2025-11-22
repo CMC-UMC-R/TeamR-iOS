@@ -1,0 +1,162 @@
+//
+//  MainView.swift
+//  CMC-UMC-R
+//
+//  Created by Subeen on 11/22/25.
+//
+
+import SwiftUI
+
+struct MainView: View {
+    
+    var dailyChecklist: [Bool] = [true, true, true, false, false, false, false]
+    
+    let leftPadding: CGFloat = 52
+    let rightPadding: CGFloat = 59
+    let topMargin: CGFloat = 74
+    
+    let boardHeightRatio: CGFloat = 472 / 768
+    let goalHeightRatio: CGFloat = 68 / 472
+    
+    
+    var body: some View {
+        GeometryReader { geo in
+            VStack {
+                dailyIconListView()
+                missionBoardView(geo.size.height * boardHeightRatio)
+                buttonListView()
+            }
+        }
+    }
+    
+    // 날짜 아이콘 리스트
+    func dailyIconListView() -> some View {
+        HStack {
+            ForEach(dailyChecklist, id: \.self) { daily in
+                dailyIconView(isChecked: true)
+            }
+        }
+        .padding(.horizontal, 28)
+        .padding(.bottom, 12)
+    }
+    
+    // 날짜 아이콘
+    func dailyIconView(isChecked: Bool) -> some View {
+        VStack(spacing: 4) {
+            Image(systemName: "checkmark")
+                .foregroundStyle(.green)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 7)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            Text("11")
+                .foregroundStyle(.black)
+        }
+        .padding(4)
+        .background(Color.primary500)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(maxWidth: .infinity)
+    }
+    
+    func backgroundView() -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .foregroundStyle(Color.primary700)
+    }
+    
+    // 미션보드
+    func missionBoardView(_ boardHeight: CGFloat) -> some View {
+        ZStack(alignment: .bottom) {
+            missionRoadView()
+                .background(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(height: boardHeight)
+            
+                .border(.red)
+            
+            goalView(boardHeight * goalHeightRatio)
+            
+                .padding(.horizontal, 10)
+                .padding(.vertical, 20)
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 42)
+    }
+    
+    func missionRoadView() -> some View {
+        
+        GeometryReader { geo in
+            RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+                .stroke(Color.sub300, lineWidth: 15)
+                
+                .overlay {
+                    RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+                        .stroke(
+                            Color.sub800,
+                            style: StrokeStyle(
+                                lineWidth: 3,
+                                lineCap: .round,
+                                lineJoin: .round,
+                                dash: [11, 11]
+                            )
+                        )                }
+                .overlay {
+                    CirclesOverlay(width: geo.size.width, height: geo.size.height, leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+                            
+                }
+        }
+    }
+    
+    func circleView() -> some View {
+        VStack {
+            Circle()
+                .frame(width: 82, height: 82)
+                .foregroundStyle(.green)
+        }
+    }
+    
+    func goalView(_ height: CGFloat) -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .foregroundStyle(Color.sub300)
+            .frame(height: height)
+    }
+    
+    func buttonListView() -> some View {
+        HStack(spacing: 9) {
+            Button {
+                
+            } label: {
+                
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(width: 105, height: 54)
+                    .foregroundStyle(Color.primary500)
+                    .overlay {
+                        Text("미션 설정")
+                            .fontStyle(.main1)
+                            .foregroundStyle(.black)
+                        
+                    }
+                
+            }
+            
+            Button {
+                
+            } label: {
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .foregroundStyle(Color.primary800)
+                    .overlay {
+                        Text("미션 인증")
+                            .foregroundStyle(.white)
+                        
+                    }
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+}
+
+#Preview {
+    MainView()
+}
