@@ -17,39 +17,59 @@ struct MissionCheckView: View {
     
     var body: some View {
         VStack {
-            Text("남은 시간")
-            Text(remainingTimeText)
-                            .font(.system(size: 28, weight: .bold))
-                            .monospacedDigit()
-                            .foregroundStyle(.black)
+            VStack(spacing: 4) {
+                HStack(spacing: 4) {
+                    Image("icon-timer")
+                    
+                    Text("남은 시간")
+                        .fontStyle(.main1)
+                        .foregroundStyle(.red)
+                }
+                
+                Text(remainingTimeText)
+                    .fontStyle(.display1)
+                    .foregroundStyle(.red)
+                    .monospacedDigit()
+            }
             
             VStack {
                 Text("\(mission.type.rawValue) 미션")
-                HStack {
-                    Text("\(mission.detail)")
-                    Image("")
+                    .fontStyle(.display2)
+                    .foregroundStyle(Color.black)
+                
+                VStack {
+                    HStack {
+                        Text("\(mission.detail)")
+                            .fontStyle(.main1)
+                            .foregroundStyle(Color.primary900)
+                        
+                        Image("icon - restart")
+                    }
+                    
+                    Image(mission.category == .move ? "illust-active" : "illust-camera")
                 }
-                Image("")
+                .padding(.bottom, 48)
+                
                 Button {
                     
                 } label: {
                     Text("미션 인증")
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(.white)
-                        .background(.blue)
+                        .foregroundStyle(Color.primary100)
+                        .background(Color.primary800)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
             .padding()
-            .background(.gray.opacity(0.7))
+            .background(Color.primary400)
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .shadow(color: Color.black.opacity(0.1), radius: 12, x: 0, y: 0)
         }
         .padding()
         .onReceive(timer) { current in
-                    now = current
-                }
+            now = current
+        }
     }
     
     var remainingTimeText: String {

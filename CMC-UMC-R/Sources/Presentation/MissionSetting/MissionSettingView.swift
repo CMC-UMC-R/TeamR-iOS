@@ -35,12 +35,13 @@ struct MissionSettingView: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(
                                     currentWeekDates()[index].isSameDay(as: date)
-                                    ? Color.blue.opacity(0.2)
-                                    : Color.clear
+                                    ? Color.primary700
+                                    : Color.primary500
                                 )
                                 .frame(width: 37, height: 37)
 
                             Text(day)
+                                .fontStyle(.main3)
                                 .foregroundStyle(.black)
                                 .padding()
                         }
@@ -48,8 +49,6 @@ struct MissionSettingView: View {
                 }
             }
             .padding()
-            
-            Divider()
             
             VStack {
                 ForEach(Mission.missions, id: \.self) { mission in
@@ -74,18 +73,26 @@ struct MissionSettingView: View {
         VStack {
             HStack {
                 Text("\(type)")
+                    .fontStyle(.title)
+                    .foregroundStyle(Color.primary900)
                 Spacer()
             }
             HStack {
-                Image(systemName: "")
-                Spacer()
                 Text("\(completeTime.timeString)")
+                    .fontStyle(.display1)
+                    .foregroundStyle(Color.gray600)
+                
                 Image(systemName: "chevron.right")
+                    .foregroundStyle(Color.gray200)
+                Spacer()
             }
         }
         .padding()
-        .background(.gray)
+        .background(Color.primary400)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: Color.black.opacity(0.10), radius: 12, x: 0, y: 0)
+        .shadow(color: Color.gray400.opacity(0.06), radius: 10, x: 0, y: 0)
+        .padding(.bottom)
     }
     
     func currentWeekDates() -> [Date] {

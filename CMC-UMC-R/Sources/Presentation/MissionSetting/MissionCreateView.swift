@@ -21,6 +21,10 @@ struct MissionCreateView: View {
     var body: some View {
         VStack {
             Text("\(mission.type.rawValue) 미션")
+                .fontStyle(.title)
+                .padding(.top, 32)
+            
+            Divider()
             
             categoryView()
             
@@ -29,6 +33,8 @@ struct MissionCreateView: View {
             }
             
             timeSettingView()
+            
+            Spacer()
             
             Button {
                 Task {
@@ -43,7 +49,7 @@ struct MissionCreateView: View {
                         let identifier = try await NotificationManager.shared.scheduleMissionNotification(
                             at: scheduledDate,
                             title: "1000보 미션 시작!",
-                            body: scheduledDate.formatted(date: .abbreviated, time: .shortened) + "에 목표를 잊지 마세요."
+                            body: scheduledDate.formatted(date: .abbreviated, time: .shortened) + "에 목표를 잊지 마세요.",
                         )
                         
                         dismiss()
@@ -61,52 +67,56 @@ struct MissionCreateView: View {
                     .background(.gray)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
+            .padding()
         }
     }
     
     func categoryView() -> some View {
-        VStack {
-            HStack {
-                ForEach(Category.allCases, id: \.self) { mode in
-                    Text("\(mode.rawValue)")
-                        .foregroundColor(selectedCategory == mode ? .black : .gray)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .background(
-                            selectedCategory == mode
-                            ? Color.white
-                            : Color.gray.opacity(0.2)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .onTapGesture {
-                            selectedCategory = mode
-                        }
-                }
+        HStack {
+            ForEach(Category.allCases, id: \.self) { mode in
+                Text("\(mode.rawValue)")
+                    .fontStyle(.display3)
+                    .foregroundColor(selectedCategory == mode ? Color.gray400 : Color.primary100)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        selectedCategory == mode
+                        ? Color.primary700
+                        : Color.primary500
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .onTapGesture {
+                        selectedCategory = mode
+                    }
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding()
     }
     
     func movementView() -> some View {
         VStack(alignment: .leading) {
             Text("세부 설정")
+                .fontStyle(.main1)
+                .foregroundStyle(Color.primary900)
             
             VStack {
-                
-                HStack(spacing: 8) {
-                    TextField("0", text: $count)
+                HStack {
+                    TextField("00", text: $count)
+                        .fontStyle(.main4)
                         .keyboardType(.numberPad)
                         .textFieldStyle(.plain)
                         .multilineTextAlignment(.trailing)
                         .onChange(of: count) { newValue in
                             count = newValue.filter { $0.isNumber }
                         }
-                        .frame(width: 60) // 숫자 필드 폭
-                        .padding(8)
-                        .background(Color.gray.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+//                        .frame(width: 60) // 숫자 필드 폭
+//                        .padding(8)
+//                        .background(Color.gray.opacity(0.1))
+//                        .clipShape(RoundedRectangle(cornerRadius: 8))
                     
                     Text("회")
-                        .font(.headline)
+                        .fontStyle(.main4)
                     
                     Spacer()
                 }
@@ -120,25 +130,23 @@ struct MissionCreateView: View {
     }
     
     func timeSettingView() -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             Text("시간")
+                .fontStyle(.main1)
+                .foregroundStyle(Color.primary900)
             
             VStack(spacing: 0) {
                 HStack {
                     VStack {
-                        Picker("Minute", selection: $hour) {
+                        Picker("Hour", selection: $hour) {
                             ForEach(0..<24, id: \.self) { value in
                                 HStack {
                                     Spacer()
                                     
                                     Text(String(format: "%02d시", value))
-                                        .font(.system(size: 24, weight: .medium))
+                                        .fontStyle(.main4)
                                         .tag(value)
                                         .frame(maxWidth: .infinity)
-                                    
-//                                    if hour == value {
-//                                        Image(systemName: "chevron.down")
-//                                    }
                                 }
                             }
                         }
@@ -157,13 +165,9 @@ struct MissionCreateView: View {
                                 HStack {
                                     Spacer()
                                     Text(String(format: "%02d분", value))
-                                        .font(.system(size: 24, weight: .medium))
+                                        .fontStyle(.main4)
                                         .tag(value)
                                         .frame(maxWidth: .infinity)
-                                    
-//                                    if minute == value {
-//                                        Image(systemName: "chevron.down")
-//                                    }
                                 }
                             }
                         }
