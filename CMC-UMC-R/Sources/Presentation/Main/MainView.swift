@@ -45,35 +45,11 @@ struct MainView: View {
     func dailyIconListView() -> some View {
         HStack {
             ForEach(dailyChecklist, id: \.self) { daily in
-                dailyIconView(isChecked: true)
+                DailyCheckView(isChecked: daily, date: 1)
             }
         }
         .padding(.horizontal, 28)
         .padding(.bottom, 12)
-    }
-    
-    // 날짜 아이콘
-    func dailyIconView(isChecked: Bool) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: "checkmark")
-                .foregroundStyle(.green)
-                .padding(.horizontal, 6)
-                .padding(.vertical, 7)
-                .background(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            Text("11")
-                .foregroundStyle(.black)
-        }
-        .padding(4)
-        .background(Color.primary500)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .frame(maxWidth: .infinity)
-    }
-    
-    func backgroundView() -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .foregroundStyle(Color.primary700)
     }
     
     // 미션보드
