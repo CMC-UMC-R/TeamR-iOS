@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MissionCircleView: View {
     
-    let mission: MissionType
+    let mission: MissionCategory
     let result: MissionResultType
     
     var body: some View {

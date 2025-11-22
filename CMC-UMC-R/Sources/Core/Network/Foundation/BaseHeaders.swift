@@ -18,7 +18,7 @@ extension BaseHeaders {
     static var baseHeaders: Dictionary<String, String> {
         [
             // TODO: UUID 가져오는 함수 연결
-            xDeviceId : ""
+            xDeviceId : DeviceManager.getDeviceUUID()
         ]
     }
 }

@@ -23,6 +23,42 @@ enum MissionCategory: String, Codable {
     }
 }
 
+extension MissionCategory {
+    var geminiCategories: [GeminiCategory] {
+        switch self {
+        case .wakeup:
+            return [
+                .bedroom,
+                .livingRoom,
+                .bathroom,
+                .kitchen,
+                .dressingRoom
+            ]
+
+        case .move:
+            return [
+                .martConvenience,
+                .building,
+                .streetTree,
+                .road
+            ]
+
+        case .work:
+            return [
+                .studyRoom,
+                .beverage,
+                .computer,
+                .writingTools,
+                .bookNote
+            ]
+
+        default:
+            return []
+        }
+    }
+}
+
+
 enum MissionType: String, CaseIterable, Codable {
     case move = "MOVEMENT"
     case shoot = "PICTURE"
