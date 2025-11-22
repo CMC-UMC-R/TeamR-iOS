@@ -22,11 +22,23 @@ struct MainView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
+                headerView()
                 dailyIconListView()
                 missionBoardView(geo.size.height * boardHeightRatio)
                 buttonListView()
             }
         }
+    }
+    
+    func headerView() -> some View {
+        HStack {
+            Text("11월 21일")
+                .fontStyle(.display1)
+            Spacer()
+            Text("구름")
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 32)
     }
     
     // 날짜 아이콘 리스트
@@ -83,12 +95,12 @@ struct MainView: View {
         .padding(.bottom, 42)
     }
     
+    // 미션 길
     func missionRoadView() -> some View {
-        
         GeometryReader { geo in
             RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
                 .stroke(Color.sub300, lineWidth: 15)
-                
+            
                 .overlay {
                     RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
                         .stroke(
@@ -99,19 +111,12 @@ struct MainView: View {
                                 lineJoin: .round,
                                 dash: [11, 11]
                             )
-                        )                }
+                        )
+                }
                 .overlay {
                     CirclesOverlay(width: geo.size.width, height: geo.size.height, leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
-                            
+                    
                 }
-        }
-    }
-    
-    func circleView() -> some View {
-        VStack {
-            Circle()
-                .frame(width: 82, height: 82)
-                .foregroundStyle(.green)
         }
     }
     
