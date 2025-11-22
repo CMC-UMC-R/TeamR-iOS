@@ -22,6 +22,7 @@ struct MainView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
+                headerView()
                 dailyIconListView()
                 missionBoardView(geo.size.height * boardHeightRatio)
                 buttonListView()
@@ -29,39 +30,26 @@ struct MainView: View {
         }
     }
     
+    func headerView() -> some View {
+        HStack {
+            Text("11월 21일")
+                .fontStyle(.display1)
+            Spacer()
+            Text("구름")
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 32)
+    }
+    
     // 날짜 아이콘 리스트
     func dailyIconListView() -> some View {
         HStack {
             ForEach(dailyChecklist, id: \.self) { daily in
-                dailyIconView(isChecked: true)
+                DailyCheckView(isChecked: daily, date: 1)
             }
         }
         .padding(.horizontal, 28)
         .padding(.bottom, 12)
-    }
-    
-    // 날짜 아이콘
-    func dailyIconView(isChecked: Bool) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: "checkmark")
-                .foregroundStyle(.green)
-                .padding(.horizontal, 6)
-                .padding(.vertical, 7)
-                .background(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            Text("11")
-                .foregroundStyle(.black)
-        }
-        .padding(4)
-        .background(Color.primary500)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .frame(maxWidth: .infinity)
-    }
-    
-    func backgroundView() -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .foregroundStyle(Color.primary700)
     }
     
     // 미션보드
@@ -72,10 +60,7 @@ struct MainView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .frame(height: boardHeight)
             
-                .border(.red)
-            
             goalView(boardHeight * goalHeightRatio)
-            
                 .padding(.horizontal, 10)
                 .padding(.vertical, 20)
         }
@@ -83,12 +68,12 @@ struct MainView: View {
         .padding(.bottom, 42)
     }
     
+    // 미션 길
     func missionRoadView() -> some View {
-        
         GeometryReader { geo in
             RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
                 .stroke(Color.sub300, lineWidth: 15)
-                
+            
                 .overlay {
                     RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
                         .stroke(
@@ -99,26 +84,30 @@ struct MainView: View {
                                 lineJoin: .round,
                                 dash: [11, 11]
                             )
-                        )                }
+                        )
+                }
                 .overlay {
                     CirclesOverlay(width: geo.size.width, height: geo.size.height, leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
-                            
+                    
                 }
         }
     }
     
-    func circleView() -> some View {
-        VStack {
-            Circle()
-                .frame(width: 82, height: 82)
-                .foregroundStyle(.green)
-        }
-    }
-    
     func goalView(_ height: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .foregroundStyle(Color.sub300)
-            .frame(height: height)
+        VStack(spacing: 0) {
+            HStack {
+                Text("GOAL")
+                    .fontStyle(.main2)
+                Image(.flag)
+                Spacer()
+            }
+            .padding(.leading, 20)
+            
+            
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundStyle(Color.sub300)
+                .frame(height: height)
+        }
     }
     
     func buttonListView() -> some View {
