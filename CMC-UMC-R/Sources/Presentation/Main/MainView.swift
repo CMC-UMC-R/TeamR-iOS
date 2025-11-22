@@ -60,10 +60,7 @@ struct MainView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .frame(height: boardHeight)
             
-                .border(.red)
-            
             goalView(boardHeight * goalHeightRatio)
-            
                 .padding(.horizontal, 10)
                 .padding(.vertical, 20)
         }
@@ -97,9 +94,20 @@ struct MainView: View {
     }
     
     func goalView(_ height: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .foregroundStyle(Color.sub300)
-            .frame(height: height)
+        VStack(spacing: 0) {
+            HStack {
+                Text("GOAL")
+                    .fontStyle(.main2)
+                Image(.flag)
+                Spacer()
+            }
+            .padding(.leading, 20)
+            
+            
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundStyle(Color.sub300)
+                .frame(height: height)
+        }
     }
     
     func buttonListView() -> some View {

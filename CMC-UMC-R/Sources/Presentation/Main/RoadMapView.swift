@@ -25,13 +25,13 @@ struct CirclesOverlay: View {
             MissionCircleView(mission: .start, result: .currentStart)
                 .position(x: leftPadding, y: topMargin)
 
-            MissionCircleView(mission: .activity, result: .failure)
+            MissionCircleView(mission: .wakeUp, result: .failure)
                 .position(x: width - rightPadding, y: topMargin + verticalGap)
 
-            MissionCircleView(mission: .activity, result: .failure)
+            MissionCircleView(mission: .move, result: .current)
                 .position(x: leftPadding, y: topMargin + verticalGap * 2)
 
-            MissionCircleView(mission: .activity, result: .failure)
+            MissionCircleView(mission: .activity, result: .none)
                 .position(x: width - rightPadding, y: topMargin + verticalGap * 2.5)
         }
     }

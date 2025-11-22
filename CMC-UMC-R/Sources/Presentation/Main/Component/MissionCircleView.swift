@@ -34,6 +34,7 @@ struct MissionCircleView: View {
                     .foregroundStyle(Color.primary900)
                     .overlay {
                         result.iconImage
+                            .offset(y: result == .current ? -28 : 0)
                     }
                     .overlay {
                         Text("\(mission.rawValue)")
