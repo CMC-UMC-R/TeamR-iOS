@@ -9,7 +9,7 @@ import Foundation
 
 enum MissionAPI {
     case createMissions                             /// 미션 생성
-    case getMissions(DayOfWeekType)       /// 요일별 미션 조회
+    case getMissions(DayOfWeek)       /// 요일별 미션 조회
     
     var path: String {
         switch self {
