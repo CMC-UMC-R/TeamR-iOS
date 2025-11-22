@@ -33,7 +33,7 @@ struct MissionCheckView: View {
             }
             
             VStack {
-                Text("\(mission.type.rawValue) 미션")
+                Text("\(mission.missionType.displayName) 미션")
                     .fontStyle(.display2)
                     .foregroundStyle(Color.black)
                 
@@ -46,7 +46,7 @@ struct MissionCheckView: View {
                         Image("icon - restart")
                     }
                     
-                    Image(mission.category == .move ? "illust-active" : "illust-camera")
+                    Image(mission.missionType == .move ? "illust-active" : "illust-camera")
                 }
                 .padding(.bottom, 48)
                 
@@ -70,19 +70,18 @@ struct MissionCheckView: View {
         .onReceive(timer) { current in
             now = current
         }
+        .task {
+            print(await DistanceTrackingManager.shared.evaluateMissionHistory(endDate: mission.completeTime, targetSteps: 1000))
+        }
     }
     
     var remainingTimeText: String {
         let target = leftTime.addingTimeInterval(5 * 60)
-           let remaining = max(0, target.timeIntervalSince(now))
-           
-           let minutes = Int(remaining) / 60
-           let seconds = Int(remaining) % 60
-           
-           return String(format: "%02d:%02d", minutes, seconds)
-       }
+        let remaining = max(0, target.timeIntervalSince(now))
+        
+        let minutes = Int(remaining) / 60
+        let seconds = Int(remaining) % 60
+        
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
-
-//#Preview {
-//    MissionCheckView()
-//}
