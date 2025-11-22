@@ -20,7 +20,7 @@ enum MissionAPI {
         case .getMissions(let dayOfWeek):
             "missions/\(dayOfWeek.rawValue)"
         case .getDailyMission(let dayOfWeek):
-            "missions/\(dayOfWeek.rawValue)"
+            "missions/daily/\(dayOfWeek.rawValue)"
         case .getWeeklyStatus:
             "missions/weekly-status"
         }

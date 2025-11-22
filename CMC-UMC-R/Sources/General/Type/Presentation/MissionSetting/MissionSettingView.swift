@@ -47,16 +47,6 @@ struct MissionSettingView: View {
     @StateObject var viewModel = MissionSettingViewModel()
     let baseMissionTypes: [MissionCategoryType] = [.wakeup, .move, .work]
     @State var isSheetPresent = false
-    @State var mission: Mission = Mission(
-        missionCategory: .wakeup,
-        missionType: .move,
-        detail: "00회",
-        completeTime: DateComponents(
-            calendar: .current,
-            year: 2025, month: 1, day: 15,
-            hour: 7, minute: 0
-        ).date!
-    )
     
     @State var date: Date = Date()
     
@@ -66,6 +56,7 @@ struct MissionSettingView: View {
                 ForEach(DayOfWeek.allCases, id: \.self) { day in
                     Button {
                         viewModel.selectedDayOfWeek = day
+                        Task { await viewModel.fetchMissions() }
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
@@ -88,26 +79,18 @@ struct MissionSettingView: View {
             
             VStack {
                 ForEach(baseMissionTypes, id: \.self) { type in
-                    let existingMission = viewModel.missions.first(where: { $0.missionCategory == type })
-//                    let existingMission = Mission.missions.first(where: { $0.type == type })
+                    let existingMission = viewModel.missions.first(where: { $0.category == type })
                     
                     componentView(
                         type: type.displayName,
-                        completeTime: existingMission?.completeTime,
+                        completeTime: existingMission?.time,
                     )
                     .onTapGesture {
-                        if existingMission == nil {
+                        if existingMission?.missionType == nil {
                             viewModel.selectedCategory = type
                             isSheetPresent = true
                         }
                     }
-                    
-//                    componentView(type: mission.type.rawValue, completeTime: mission.completeTime)
-//                        .onTapGesture {
-//                            self.mission = mission
-//                            viewModel.selectedCategory = mission.type
-//                            isSheetPresent = true
-//                        }
                 }
             }
             .padding()
@@ -115,10 +98,13 @@ struct MissionSettingView: View {
             Spacer()
         }
         .sheet(isPresented: $isSheetPresent) {
-            MissionCreateView(viewModel: viewModel, mission: $mission, date: $date)
+            MissionCreateView(viewModel: viewModel, date: $date)
                 .presentationDragIndicator(.visible)
                 .onAppear {
                     viewModel.reset()
+                }
+                .onDisappear {
+                    Task { await viewModel.fetchMissions() }
                 }
         }
         .task {
@@ -127,7 +113,7 @@ struct MissionSettingView: View {
         }
     }
     
-    func componentView(type: String, completeTime: Date?) -> some View {
+    func componentView(type: String, completeTime: String?) -> some View {
         VStack {
             HStack {
                 Text("\(type)")
@@ -136,7 +122,7 @@ struct MissionSettingView: View {
                 Spacer()
             }
             HStack {
-                Text("\(completeTime?.timeString ?? "00:00")")
+                Text("\(completeTime ?? "00:00")")
                     .fontStyle(.display1)
                     .foregroundStyle(Color.gray600)
                 

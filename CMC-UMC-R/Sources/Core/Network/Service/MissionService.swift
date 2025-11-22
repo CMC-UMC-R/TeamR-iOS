@@ -16,15 +16,15 @@ struct MissionsResponse: Codable {
 struct CreateMissionResponse: Codable {
     let missionId: Int
     let missionType: MissionType
-    let word: String
-    let count: Int
+    let word: String?
+    let count: Int?
 }
 
 struct CreateMissionRequest: Codable {
     let userId: String
     let time: String
     let missionCategory: MissionCategoryType
-    let geminiCategory: GeminiCategory?
+    let geminiCategory: GeminiCategoryType?
     let missionType: MissionType
     let dayOfWeek: DayOfWeek
     let word: String?
@@ -39,7 +39,7 @@ class MissionService {
 extension MissionService {
     func getMissions(dayOfWeek: DayOfWeek) async throws -> MissionsResponse {
         return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getMissions(dayOfWeek)) { result in
+            provider.request(.getDailyMission(dayOfWeek)) { result in
                 switch result {
                 case let .success(response):
                     do {
@@ -66,7 +66,7 @@ extension MissionService {
                         let response = try self.jsonDecoder.decode(CreateMissionResponse.self, from: response.data)
                         continuation.resume(returning: response)
                     } catch {
-                        Log.network("getMissions() 실패", error.localizedDescription)
+                        Log.network("createMissions() 실패", error.localizedDescription)
                         continuation.resume(throwing: error)
                     }
                     

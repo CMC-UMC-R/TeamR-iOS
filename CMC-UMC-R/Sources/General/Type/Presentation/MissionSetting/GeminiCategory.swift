@@ -1,5 +1,5 @@
 //
-//  MissionPhotoCategory.swift
+//  GeminiCategory.swift
 //  CMC-UMC-R
 //
 //  Created by 이인호 on 11/23/25.

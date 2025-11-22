@@ -33,13 +33,19 @@ struct MissionCheckView: View {
             }
             
             VStack {
-                Text("\(mission.missionType.displayName) 미션")
+                Text("\(mission.missionType?.displayName ?? "") 미션")
                     .fontStyle(.display2)
                     .foregroundStyle(Color.black)
                 
                 VStack {
                     HStack {
-                        Text("\(mission.detail)")
+                        let missionText =
+                            mission.word != nil
+                            ? "\(mission.word!) 촬영하기"
+                            : "\(mission.count ?? 0) 움직이기"
+
+                        
+                        Text("\(missionText)")
                             .fontStyle(.main1)
                             .foregroundStyle(Color.primary900)
                         
@@ -71,12 +77,12 @@ struct MissionCheckView: View {
             now = current
         }
         .task {
-            print(await DistanceTrackingManager.shared.evaluateMissionHistory(endDate: mission.completeTime, targetSteps: 1000))
+//            print(await DistanceTrackingManager.shared.evaluateMissionHistory(endDate: mission.completeTime, targetSteps: 1000))
         }
     }
     
     var remainingTimeText: String {
-        let target = leftTime.addingTimeInterval(5 * 60)
+        let target = leftTime.addingTimeInterval(10 * 60)
         let remaining = max(0, target.timeIntervalSince(now))
         
         let minutes = Int(remaining) / 60

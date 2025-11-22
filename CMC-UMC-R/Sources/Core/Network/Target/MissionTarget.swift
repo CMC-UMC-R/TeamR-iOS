@@ -53,8 +53,7 @@ extension MissionTarget: BaseTargetType {
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
         case .getDailyMission(let dayOfWeek):
-            let parameters: [String: Any] = ["dayOfWeek": dayOfWeek.rawValue]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return .requestPlain
             
         case .getWeeklyStatus:
             return .requestPlain

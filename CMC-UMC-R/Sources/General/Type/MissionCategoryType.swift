@@ -23,7 +23,7 @@ enum MissionCategoryType: String, Codable {
 }
 
 extension MissionCategoryType {
-    var geminiCategories: [GeminiCategory] {
+    var geminiCategories: [GeminiCategoryType] {
         switch self {
         case .wakeup:
             return [

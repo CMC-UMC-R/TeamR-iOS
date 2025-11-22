@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MissionCreateView: View {
     @ObservedObject var viewModel: MissionSettingViewModel
-    @Binding var mission: Mission
     @Binding var date: Date
     
     @Environment(\.dismiss) var dismiss
@@ -23,6 +22,8 @@ struct MissionCreateView: View {
             Divider()
             
             categoryView()
+                .opacity(viewModel.selectedCategory == .work ? 0 : 1)
+                .allowsHitTesting(viewModel.selectedCategory != .work)
             
             movementView()
             
@@ -94,7 +95,7 @@ struct MissionCreateView: View {
     func movementView() -> some View {
         VStack(alignment: .leading) {
             if viewModel.selectedType == .move {
-                Text("움직임")
+                Text(viewModel.selectedCategory == .wakeup ? "움직임" : "걸음")
                     .fontStyle(.main1)
                     .foregroundStyle(Color.primary900)
                 
