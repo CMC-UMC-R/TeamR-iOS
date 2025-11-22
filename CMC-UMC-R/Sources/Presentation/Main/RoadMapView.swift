@@ -24,7 +24,7 @@ struct RoadMapView: View {
                     )
                 
                 // 원 4개 배치
-                CirclesOverlay(width: geometry.size.width, height: geometry.size.height)
+//                CirclesOverlay(width: geometry.size.width, height: geometry.size.height)
             }
         }
     }
@@ -34,15 +34,19 @@ struct CirclesOverlay: View {
     let width: CGFloat
     let height: CGFloat
     
+    let leftPadding: CGFloat
+    let rightPadding: CGFloat
+    let topMargin: CGFloat
+    
     var body: some View {
-        let leftPadding: CGFloat = 50
-        let rightPadding: CGFloat = 50
-        let topMargin: CGFloat = 70
+        let leftPadding: CGFloat = 52
+        let rightPadding: CGFloat = 52
+        let topMargin: CGFloat = 74
         
-        let remainingHeight = height - topMargin
-        let verticalGap = remainingHeight / 3
+//        let remainingHeight = height - topMargin
+        let verticalGap: CGFloat = 98
         
-        let circleRadius: CGFloat = 60
+        let circleRadius: CGFloat = 30
         
         ZStack {
             // 원 1 (시작점 - 왼쪽 위)
