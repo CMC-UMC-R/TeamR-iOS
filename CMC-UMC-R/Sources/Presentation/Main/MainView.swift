@@ -22,18 +22,20 @@ struct MainView: View {
     
     
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-                headerView()
-                dailyIconListView()
-                missionBoardView(geo.size.height * boardHeightRatio)
-                buttonListView()
+        NavigationStack {
+            GeometryReader { geo in
+                VStack {
+                    headerView()
+                    dailyIconListView()
+                    missionBoardView(geo.size.height * boardHeightRatio)
+                    buttonListView()
+                }
             }
-        }
-        .onAppear {
-            Task {
-                await mainViewModel.getMissionLogList()
-                await mainViewModel.getWeeklyStatus()
+            .onAppear {
+                Task {
+                    await mainViewModel.getMissionLogList()
+                    await mainViewModel.getWeeklyStatus()
+                }
             }
         }
     }
@@ -136,8 +138,8 @@ struct MainView: View {
                 
             }
             
-            Button {
-                
+            NavigationLink {
+                mainViewModel
             } label: {
                 RoundedRectangle(cornerRadius: 12)
                     .frame(maxWidth: .infinity)

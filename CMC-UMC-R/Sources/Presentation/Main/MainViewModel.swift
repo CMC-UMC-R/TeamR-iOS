@@ -12,6 +12,8 @@ import Combine
 final class MainViewModel: ObservableObject {
     @Published var missionLogResponse: MissionLogListResponse?
     @Published var weeklyStatusResponse: WeeklyStatusResponse?
+    @Published var currentMission: Mission?
+    @Published var dailyMissionResponse: DailyMissionResponse?
     
     var missionLogService = MissionLogService()
     var missionService = MissionService()
@@ -33,5 +35,9 @@ extension MainViewModel {
         } catch {
             print("getWeeklyStatus() error")
         }
+    }
+    
+    func getDailyMission() async {
+    
     }
 }
