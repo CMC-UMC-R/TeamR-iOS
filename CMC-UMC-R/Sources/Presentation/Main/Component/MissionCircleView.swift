@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MissionCircleView: View {
     
-    let mission: MissionCategory
-    let result: MissionResultType
+    let mission: MissionCategoryType
+    let result: MissionStatusType
     
     var body: some View {
         Group {
@@ -34,7 +34,7 @@ struct MissionCircleView: View {
                     .foregroundStyle(Color.primary900)
                     .overlay {
                         result.iconImage
-                            .offset(y: result == .current ? -28 : 0)
+                            .offset(y: result == .PENDING ? -28 : 0)
                     }
                     .overlay {
                         Text("\(mission.rawValue)")
@@ -54,9 +54,9 @@ struct MissionCircleView: View {
 }
 
 #Preview("Start") {
-    MissionCircleView(mission: .start, result: .currentStart)
+    MissionCircleView(mission: .start, result: .FAILURE)
 }
 
 #Preview("Complete") {
-    MissionCircleView(mission: .work, result: .current)
+    MissionCircleView(mission: .work, result: .SUCCESS)
 }

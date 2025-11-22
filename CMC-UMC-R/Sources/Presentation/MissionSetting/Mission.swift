@@ -7,73 +7,8 @@
 
 import Foundation
 
-enum MissionCategory: String, Codable {
-    case start = "START"
-    case wakeup = "WAKE_UP"
-    case move = "MOVEMENT"
-    case work = "WORK"
-
-    var displayName: String {
-        switch self {
-        case .start: return "시작"
-        case .wakeup: return "기상"
-        case .move: return "이동"
-        case .work: return "작업"
-        }
-    }
-}
-
-extension MissionCategory {
-    var geminiCategories: [GeminiCategory] {
-        switch self {
-        case .wakeup:
-            return [
-                .bedroom,
-                .livingRoom,
-                .bathroom,
-                .kitchen,
-                .dressingRoom
-            ]
-
-        case .move:
-            return [
-                .martConvenience,
-                .building,
-                .streetTree,
-                .road
-            ]
-
-        case .work:
-            return [
-                .studyRoom,
-                .beverage,
-                .computer,
-                .writingTools,
-                .bookNote
-            ]
-
-        default:
-            return []
-        }
-    }
-}
-
-
-enum MissionType: String, CaseIterable, Codable {
-    case move = "MOVEMENT"
-    case shoot = "PICTURE"
-    
-    var displayName: String {
-        switch self {
-        case .move: return "활동 인증"
-        case .shoot: return "사진 인증"
-        }
-    }
-}
-
-
 struct Mission: Codable, Hashable {
-    let missionCategory: MissionCategory
+    let missionCategory: MissionCategoryType
     let missionType: MissionType
     let detail: String
     let completeTime: Date
