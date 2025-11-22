@@ -11,15 +11,16 @@ struct MainView: View {
     
     var dailyChecklist: [Bool] = [true, true, true, false, false, false, false]
     
-    let leadingPadding: Int = 50
-    let trailingPadding: Int = 50
-    let topPadding: Int = 70
-
+    let leftPadding: CGFloat = 52
+    let rightPadding: CGFloat = 52
+    let topMargin: CGFloat = 74
+    
     
     var body: some View {
         VStack {
             dailyIconListView()
             missionBoardView()
+            buttonListView()
         }
     }
     
@@ -31,6 +32,7 @@ struct MainView: View {
             }
         }
         .padding(.horizontal, 28)
+        .padding(.bottom, 12)
     }
     
     // 날짜 아이콘
@@ -59,24 +61,78 @@ struct MainView: View {
     
     // 미션보드
     func missionBoardView() -> some View {
-        
-        ZStack {
+        ZStack(alignment: .bottom) {
             
-            backgroundView()
-            
-            GeometryReader { geometry in
-                missionRoadView(geometry.size.width, geometry.size.height)
-            }
-            
-            
+            missionRoadView()
+                .background(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            goalView()
+                
+                .padding(.horizontal, 10)
+                .padding(.vertical, 20)
         }
         .padding(.horizontal, 20)
+        .padding(.bottom, 42)
     }
     
-    func missionRoadView(_ width: Double, _ height: Double) -> some View {
-        RoadPathShape()
-            .stroke(Color.yellow, lineWidth: 15)
+    func missionRoadView() -> some View {
         
+        RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+            .stroke(Color.yellow, lineWidth: 15)
+            .frame(height: 472)
+            .overlay {
+                RoadPathShape(leftPadding: leftPadding, rightPadding: rightPadding, topMargin: topMargin)
+                    .stroke(Color.green, lineWidth: 3)
+            }
+        
+    }
+    
+    func circleView() -> some View {
+        VStack {
+            Circle()
+                .frame(width: 82, height: 82)
+                .foregroundStyle(.green)
+        }
+    }
+    
+    func goalView() -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .foregroundStyle(.yellow)
+            .frame(height: 68)
+    }
+    
+    func buttonListView() -> some View {
+        HStack(spacing: 9) {
+            Button {
+                
+            } label: {
+                
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(width: 105, height: 54)
+                    .foregroundStyle(.mint)
+                    .overlay {
+                        Text("미션 설정")
+                            .foregroundStyle(.black)
+                        
+                    }
+                
+            }
+            
+            Button {
+                
+            } label: {
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .foregroundStyle(.green)
+                    .overlay {
+                        Text("미션 인증")
+                            .foregroundStyle(.white)
+                        
+                    }
+            }
+        }
+        .padding(.horizontal, 20)
     }
 }
 

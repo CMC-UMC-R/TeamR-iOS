@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct RoadPathShape: Shape {
+    
+    var leftPadding: CGFloat = 52
+    var rightPadding: CGFloat = 52
+    var topMargin: CGFloat = 74
+    
+    
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
@@ -15,13 +21,11 @@ struct RoadPathShape: Shape {
         let height = rect.height
         
         // 고정 여백
-        let leftPadding: CGFloat = 50
-        let rightPadding: CGFloat = 50
-        let topMargin: CGFloat = 70
+
         
         // 남은 높이를 3등분
         let remainingHeight = height - topMargin
-        let verticalGap = remainingHeight / 5
+        let verticalGap = CGFloat(95)
         
         // 곡선 반경 (도로 두께와 동일하게)
         let curveRadius: CGFloat = 30
@@ -32,9 +36,9 @@ struct RoadPathShape: Shape {
 
         let point3 = CGPoint(x: width - rightPadding, y: topMargin + verticalGap)
 
-        let point4 = CGPoint(x: leftPadding, y: topMargin + verticalGap)
+        let point4 = CGPoint(x: leftPadding + 10, y: topMargin + verticalGap)
         
-        let point5 = CGPoint(x: leftPadding, y: point4.y + verticalGap)
+        let point5 = CGPoint(x: leftPadding + 10, y: point4.y + verticalGap)
         
         let point6 = CGPoint(x: width - rightPadding, y: point5.y)
         
