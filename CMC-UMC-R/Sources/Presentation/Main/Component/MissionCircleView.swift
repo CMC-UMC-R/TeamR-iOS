@@ -58,5 +58,5 @@ struct MissionCircleView: View {
 }
 
 #Preview("Complete") {
-    MissionCircleView(mission: .activity, result: .current)
+    MissionCircleView(mission: .work, result: .current)
 }

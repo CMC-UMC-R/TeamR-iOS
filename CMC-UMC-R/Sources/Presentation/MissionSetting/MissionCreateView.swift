@@ -186,3 +186,9 @@ struct MissionCreateView: View {
         .padding()
     }
 }
+
+#Preview {
+    @Previewable @State var mission: Mission = .init(type: .start, category: .move, detail: "", completeTime: .init())
+    
+    MissionCreateView(mission: $mission, date: .constant(Date()))
+}

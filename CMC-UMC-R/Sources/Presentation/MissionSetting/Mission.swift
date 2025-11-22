@@ -8,6 +8,7 @@
 import Foundation
 
 enum MissionType: String, Codable {
+    case start = "START"
     case wakeup = "기상"
     case move = "이동"
     case work = "작업"
