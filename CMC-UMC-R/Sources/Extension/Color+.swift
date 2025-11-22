@@ -15,7 +15,7 @@ extension Color {
     static let primary600: Color = .init(hex: "97DD9F")
     static let primary700: Color = .init(hex: "61D673")
     static let primary800: Color = .init(hex: "29D049")
-    static let primary900: Color = .init(hex: "29D049")
+    static let primary900: Color = .init(hex: "18A537")
     
     static let sub300: Color = .init(hex: "FBF3DB")
     static let sub400: Color = .init(hex: "FAEDA3")
