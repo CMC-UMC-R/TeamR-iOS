@@ -15,7 +15,7 @@ final class MainViewModel: ObservableObject {
     @Published var currentMission: Mission?
     @Published var dailyMissionResponse: DailyMissionResponse?
     
-    @Published var mission: Mission = Mission(category: .move, categoryTitle: "", missionType: .move, time: "", word: "", count: 0)
+    @Published var mission: Mission = Mission(category: .wakeup, categoryTitle: "", missionType: .shoot, time: "10:00", word: "bed", count: 0)
     
     var missionLogService = MissionLogService()
     var missionService = MissionService()

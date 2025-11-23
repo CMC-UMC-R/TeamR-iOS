@@ -35,7 +35,7 @@ struct MainView: View {
                 Task {
                     await mainViewModel.getMissionLogList()
                     await mainViewModel.getWeeklyStatus()
-                    await mainViewModel.getDailyMission()
+//                    await mainViewModel.getDailyMission()
                 }
             }
         }
@@ -140,12 +140,13 @@ struct MainView: View {
             }
             
             NavigationLink {
-                if let missionDate = todayDate(from: mainViewModel.mission.time) {
-                    MissionCheckView(
-                        mission: $mainViewModel.mission,
-                        leftTime: missionDate
-                    )
-                }
+                MissionCheckView(mission: $mainViewModel.mission, leftTime: Calendar.current.date(byAdding: .minute, value: 0, to: Date())!)
+    //                if let missionDate = todayDate(from: mainViewModel.mission.time) {
+    //                    MissionCheckView(
+    //                        mission: $mainViewModel.mission,
+    //                        leftTime: missionDate
+    //                    )
+    //                }
             } label: {
                 RoundedRectangle(cornerRadius: 12)
                     .frame(maxWidth: .infinity)
