@@ -40,9 +40,20 @@ extension GeminiAITarget: BaseTargetType {
     
     var task: Moya.Task {
         switch self {
-        case .verify(let word, let image):
-            let parameters: [String: Any] = ["word": word]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+        case .verify(let word, let imageData):
+            // word는 query parameter로, image는 multipart body로 전달
+            let formData = MultipartFormData(
+                provider: .data(imageData),
+                name: "image",
+                fileName: "photo.jpg",
+                mimeType: "image/jpeg"
+            )
+            
+            return .uploadCompositeMultipart(
+                [formData],
+                urlParameters: ["word": word]
+            )
+            
         case .wordsGenerate(let missionCategory):
             let parameters: [String: Any] = ["category": missionCategory.rawValue]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
