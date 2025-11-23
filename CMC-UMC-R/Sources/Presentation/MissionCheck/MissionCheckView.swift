@@ -42,13 +42,7 @@ struct MissionCheckView: View {
                     
                     VStack {
                         HStack {
-                            let missionText =
-                            mission.word != nil
-                            ? "\(mission.word!) 촬영하기"
-                            : "\(mission.count ?? 0) 움직이기"
-                            
-                            
-                            Text("\(missionText)")
+                            Text(mission.missionType == .move ? "\(mission.count ?? 0) 움직이기" : "\(mission.word!) 촬영하기")
                                 .fontStyle(.main1)
                                 .foregroundStyle(Color.primary900)
                             

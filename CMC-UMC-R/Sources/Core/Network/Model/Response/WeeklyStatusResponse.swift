@@ -5,6 +5,10 @@
 //  Created by Subeen on 11/23/25.
 //
 
+struct RootWeeklyStatusResponse: Codable {
+    let dailyStatuses: [WeeklyStatusResponseElement]
+}
+
 struct WeeklyStatusResponseElement: Codable, Hashable {
     let dayOfWeek: DayOfWeek
     let date: String

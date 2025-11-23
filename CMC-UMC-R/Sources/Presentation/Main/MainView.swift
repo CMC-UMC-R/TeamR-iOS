@@ -10,9 +10,7 @@ import SwiftUI
 struct MainView: View {
     
     @State var mainViewModel = MainViewModel()
-    
-    @State var mission = Mission(category: .wakeup, categoryTitle: "", missionType: .move, time: "09:00", word: nil, count: 1)
-    
+
     var dailyChecklist: [Bool] = [true, true, true, false, false, false, false]
     
     let leftPadding: CGFloat = 52
@@ -37,6 +35,7 @@ struct MainView: View {
                 Task {
                     await mainViewModel.getMissionLogList()
                     await mainViewModel.getWeeklyStatus()
+                    await mainViewModel.getDailyMission()
                 }
             }
         }
@@ -141,13 +140,12 @@ struct MainView: View {
             }
             
             NavigationLink {
-//                let mission = MissionTimeHelper.getNextUpcomingMission(from: mainViewModel.dailyMissionResponse?.missions as! [Mission])
-//                
-//                if let missionDate = todayDate(from: mission.time) {
-//                    let testLeftTime = Calendar.current.date(byAdding: .minute, value: 0, to: missionDate)!
-//                    MissionCheckView(mission: <#T##Binding<Mission>#>, leftTime: missionDate)
-//                }
-                MissionCheckView(mission: $mission, leftTime: Calendar.current.date(byAdding: .minute, value: 0, to: Date())!)
+                if let missionDate = todayDate(from: mainViewModel.mission.time) {
+                    MissionCheckView(
+                        mission: $mainViewModel.mission,
+                        leftTime: missionDate
+                    )
+                }
             } label: {
                 RoundedRectangle(cornerRadius: 12)
                     .frame(maxWidth: .infinity)
@@ -164,33 +162,16 @@ struct MainView: View {
     }
     
     func todayDate(from timeString: String) -> Date? {
-        // timeString: "HH:mm" 또는 "HH:mm:ss"
-        
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.timeZone = .current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.locale = .current
         
-        // 서버가 "00:16" 또는 "00:16:00" 둘 다 가능하므로 이렇게 처리
-        if timeString.count == 5 {
-            formatter.dateFormat = "HH:mm"
-        } else {
-            formatter.dateFormat = "HH:mm:ss"
-        }
-        
-        guard let time = formatter.date(from: timeString) else { return nil }
-        
-        // 오늘 날짜 가져오기
-        let today = Calendar.current.startOfDay(for: Date())
-        
-        // time에서 시/분/초 추출
-        let components = Calendar.current.dateComponents([.hour, .minute, .second], from: time)
-        
-        // 오늘 날짜 + time 의 시간 합치기
-        return Calendar.current.date(bySettingHour: components.hour ?? 0,
-                                     minute: components.minute ?? 0,
-                                     second: components.second ?? 0,
-                                     of: today)
+        let today = Date()
+        let todayString = today.formatted(.dateTime.year().month().day())
+
+        return formatter.date(from: "\(todayString) \(timeString)")
     }
+
 
 }
 

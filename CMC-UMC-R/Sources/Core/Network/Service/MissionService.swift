@@ -97,13 +97,13 @@ extension MissionService {
         }
     }
     
-    func getWeeklyStatus() async throws -> WeeklyStatusResponse {
+    func getWeeklyStatus() async throws -> RootWeeklyStatusResponse {
         return try await withCheckedThrowingContinuation { continuation in
             provider.request(.getWeeklyStatus) { result in
                 switch result {
                 case let .success(response):
                     do {
-                        let response = try self.jsonDecoder.decode(WeeklyStatusResponse.self, from: response.data)
+                        let response = try self.jsonDecoder.decode(RootWeeklyStatusResponse.self, from: response.data)
                         continuation.resume(returning: response)
                     } catch {
                         Log.network("getMissions() 실패", error.localizedDescription)

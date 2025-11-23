@@ -9,7 +9,7 @@ import Foundation
 
 struct DailyMissionResponse: Codable {
     let dayOfWeek: DayOfWeek
-    let missions: [DailyMission]
+    let missions: [Mission]
 }
 
 struct DailyMission: Codable {

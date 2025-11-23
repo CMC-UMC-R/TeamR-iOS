@@ -15,6 +15,8 @@ final class MainViewModel: ObservableObject {
     @Published var currentMission: Mission?
     @Published var dailyMissionResponse: DailyMissionResponse?
     
+    @Published var mission: Mission = Mission(category: .move, categoryTitle: "", missionType: .move, time: "", word: "", count: 0)
+    
     var missionLogService = MissionLogService()
     var missionService = MissionService()
     
@@ -31,13 +33,18 @@ extension MainViewModel {
     
     func getWeeklyStatus() async {
         do {
-            weeklyStatusResponse = try await missionService.getWeeklyStatus()
+            weeklyStatusResponse = try await missionService.getWeeklyStatus().dailyStatuses
         } catch {
             print("getWeeklyStatus() error")
         }
     }
     
     func getDailyMission() async {
-    
+        do {
+            let missions = try await missionService.getDailyMission(dayOfWeek: .sunday).missions
+            mission = MissionTimeHelper.getNextUpcomingMission(from: missions) ?? Mission(category: .move, categoryTitle: "", missionType: .move, time: "", word: "", count: 0)
+        } catch {
+            print("getDailyMission() error")
+        }
     }
 }
